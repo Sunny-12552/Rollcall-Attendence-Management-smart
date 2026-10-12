@@ -1,0 +1,23 @@
+{
+  "name": "qr-attendance",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "start:tunnel": "node scripts/start-tunnel.js",
+    "start:clean": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/start-clean.ps1",
+    "dev": "node --watch server.js",
+    "migrate:sheet": "node scripts/copy-spreadsheet.js",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "better-sqlite3": "^13.0.3",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "googleapis": "^144.0.0",
+    "nodemailer": "^6.9.16",
+    "qrcode": "^1.5.4"
+  }
+}

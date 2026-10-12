@@ -1,0 +1,8 @@
+[theme]
+base = "light"
+primaryColor = "#d97c67"
+backgroundColor = "#f6f3ee"
+secondaryBackgroundColor = "#edf1eb"
+textColor = "#173232"
+font = "DM Sans:https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap"
+headingFont = "Space Grotesk:https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&display=swap"

@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#153b3b">
+  <title>Rollcall | QR Attendance</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/attendance.css">
+  <link rel="stylesheet" href="/toast.css">
+</head>
+<body>
+  <div id="success-toast" class="success-toast hidden" role="status" aria-live="polite"></div>
+  <main class="shell">
+    <header class="topbar"><a class="brand" href="/">rollcall<span>.</span></a><button id="logout" class="link-button hidden">Log out</button></header>
+    <section id="student-view" class="view hidden">
+      <div class="eyebrow">STUDENT CHECK-IN</div>
+      <h1>Be counted.<br><em>Keep moving.</em></h1>
+      <p class="lead">Enter your details to mark attendance for the active class.</p>
+      <div id="session-summary" class="session-summary"></div>
+      <form id="attendance-form" class="panel form-grid">
+        <label>Student name<input id="student-name" name="name" autocomplete="name" placeholder="e.g. Rahul Kumar" minlength="3" pattern="[A-Za-z]+( [A-Za-z]+)*" title="Use at least 3 alphabetic characters and spaces only." required></label>
+        <label>Batch<select id="student-batch" name="batch" required></select></label>
+        <label>Email for attendance updates <span class="muted">optional</span><input id="student-email" name="email" type="email" autocomplete="email" placeholder="you@example.com"></label>
+        <button class="primary" type="submit">Mark attendance <span>→</span></button>
+        <p id="student-message" class="message" role="alert"></p>
+      </form>
+      <section id="confirmation" class="confirmation hidden"></section>
+      <section id="student-attendance" class="panel student-attendance hidden">
+        <div class="section-label">PERSONAL REPORT</div>
+        <h2>Check Your Attendance</h2>
+        <form id="student-attendance-form" class="form-grid">
+          <label>Student name<input id="attendance-check-name" name="name" autocomplete="name" placeholder="e.g. Rahul Kumar" required></label>
+          <label>Batch<select id="attendance-check-batch" name="batch" required></select></label>
+          <button id="attendance-check-button" class="secondary" type="submit">Check Attendance</button>
+          <p id="attendance-check-message" class="message" role="alert"></p>
+        </form>
+        <div id="student-attendance-result" class="student-attendance-result hidden"></div>
+      </section>
+    </section>
+    <section id="login-view" class="view narrow hidden">
+      <div class="eyebrow">INSTRUCTOR ACCESS</div><h1>Attendance,<br><em>in control.</em></h1>
+      <p class="lead">Sign in securely with your admin email.</p>
+      <form id="login-form" class="panel form-grid">
+        <label>Admin email<input id="login-email" type="email" autocomplete="username" required></label>
+        <label>Password<input id="password" type="password" autocomplete="current-password" required></label>
+        <label id="login-otp-label" class="hidden">One-time code from your email<input id="login-otp" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6"></label>
+        <button class="primary" type="submit">Open dashboard <span>→</span></button>
+        <button id="forgot-password-link" class="link-button" type="button">Forgot password?</button>
+        <button id="show-registration-link" class="link-button" type="button">New Admin? Register Here</button>
+        <p id="login-message" class="message" role="alert"></p>
+      </form>
+      <form id="first-password-form" class="panel form-grid hidden">
+        <h2>Set your password</h2>
+        <p class="lead">Your invitation was verified. Choose a new password before continuing to the dashboard.</p>
+        <label>New password<input id="first-password" type="password" autocomplete="new-password" minlength="8" required></label>
+        <label>Confirm new password<input id="first-password-confirm" type="password" autocomplete="new-password" minlength="8" required></label>
+        <button class="primary" type="submit">Save password <span>→</span></button>
+        <button id="first-password-logout" class="link-button" type="button">Log out</button>
+        <p id="first-password-message" class="message" role="alert"></p>
+      </form>
+      <form id="registration-form" class="panel form-grid hidden">
+        <h2>Register for admin access</h2>
+        <div id="registration-details" class="form-grid">
+          <label id="registration-name-label">Full name<input id="registration-name" type="text" autocomplete="name" minlength="2" maxlength="100" required></label>
+          <label id="registration-email-label">Email<input id="registration-email" type="email" autocomplete="email" required></label>
+          <label id="registration-phone-label">Phone number<input id="registration-phone" type="tel" autocomplete="tel" required></label>
+          <label id="registration-password-label">Password<input id="registration-password" type="password" autocomplete="new-password" minlength="8" required></label>
+          <label id="registration-confirm-password-label">Confirm password<input id="registration-confirm-password" type="password" autocomplete="new-password" minlength="8" required></label>
+          <label id="bootstrap-secret-label" class="hidden">One-time Main Admin bootstrap secret<input id="bootstrap-secret" type="password" autocomplete="off" minlength="32"></label>
+        </div>
+        <p id="bootstrap-claim-help" class="lead hidden">Use the email and current password of the existing, verified, active admin account you want to make Main Admin, plus the one-time bootstrap secret. This does not create a new account.</p>
+        <div id="registration-credentials" class="form-grid hidden">
+          <label>Verification code<input id="registration-otp" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6" required></label>
+        </div>
+        <button class="primary" type="submit">Create account <span>→</span></button>
+        <button id="registration-resend" class="link-button hidden" type="button">Resend verification code</button>
+        <button id="resume-signup-link" class="link-button" type="button">Already signed up? Resend verification code</button>
+        <button class="link-button auth-back-link" type="button">Back to login</button>
+        <p id="registration-message" class="message" role="alert"></p>
+      </form>
+      <form id="recovery-form" class="panel form-grid hidden">
+        <h2>Reset your password</h2>
+        <label>Admin email<input id="recovery-email" type="email" autocomplete="email" required></label>
+        <div id="recovery-credentials" class="form-grid hidden">
+          <label>Verification code<input id="recovery-otp" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6" required></label>
+          <label>New password<input id="recovery-password" type="password" autocomplete="new-password" minlength="8" required></label>
+          <label>Re-enter new password<input id="recovery-confirm-password" type="password" autocomplete="new-password" minlength="8" required></label>
+        </div>
+        <button class="primary" type="submit">Send verification code <span>→</span></button>
+        <button id="recovery-resend" class="link-button hidden" type="button">Resend verification code</button>
+        <button class="link-button auth-back-link" type="button">Back to login</button>
+        <p id="recovery-message" class="message" role="alert"></p>
+      </form>
+    </section>
+    <section id="dashboard-view" class="view hidden">
+      <div class="dashboard-head"><div><div class="eyebrow">INSTRUCTOR DESK</div><h1>Today’s attendance</h1><p class="lead">Create a room, share its QR, and let the sheet do the bookkeeping.</p><p id="dashboard-date" class="dashboard-date" aria-live="polite"></p></div><a class="sheet-link" href="https://sheets.google.com" target="_blank" rel="noreferrer">Open Sheets ↗</a></div>
+      <div class="dashboard-grid">
+        <section class="panel generator"><div class="section-label">NEW SESSION</div><form id="session-form" class="form-grid"><label>Subject<select id="subject" required></select></label><label>Batch scope <span class="muted">optional</span><select id="scope-batch"><option value="">All batches</option></select></label><label>QR validity<select id="qr-duration" required><option value="5">5 minutes</option><option value="10">10 minutes</option><option value="20">20 minutes</option><option value="30" selected>30 minutes</option></select></label><button class="primary" type="submit">Generate QR <span>↗</span></button><p id="session-message" class="message" role="alert"></p></form><div id="qr-result" class="qr-result hidden"></div></section>
+        <section class="panel stats"><div class="section-label">LIVE TOTALS</div><div class="stat-number" id="total-count">0</div><p>records loaded today</p><div class="stat-rule"></div><div class="mini-stats"><div><strong id="present-count">0</strong><span>present</span></div><div><strong id="absent-count">0</strong><span>absent</span></div></div></section>
+      </div>
+      <section class="panel table-panel" id="qr-recovery-panel">
+        <div class="table-head"><div><div class="section-label">SESSION MANAGEMENT</div><h2>QR Session Recovery</h2></div><button id="refresh-qr-sessions" class="secondary" type="button">Refresh</button></div>
+        <p id="qr-recovery-message" class="message" role="alert"></p>
+        <div class="table-wrap"><table><thead><tr><th>Subject</th><th>Attendance date</th><th>Status</th><th>QR session ID</th><th>Students marked</th><th>Recovery status</th><th>Actions</th></tr></thead><tbody id="qr-recovery-sessions"></tbody></table></div>
+      </section>
+      <div class="report-links"><button id="open-records" class="panel report-link" type="button"><span class="section-label">ATTENDANCE LOG</span><strong>Recent records</strong><span>Open detailed attendance →</span></button><button id="open-percentages" class="panel report-link" type="button"><span class="section-label">PERCENTAGE REPORT</span><strong>Subject-wise attendance</strong><span>Open detailed report →</span></button></div>
+      <section class="panel">
+        <div class="section-label">EMAIL SUMMARY</div>
+        <h2>Send a student attendance summary</h2>
+        <p class="lead">Uses the saved student email and attendance records from Google Sheets.</p>
+        <form id="summary-email-form" class="form-grid">
+          <label>Student name<input id="summary-email-name" type="text" autocomplete="name" required></label>
+          <label>Batch<select id="summary-email-batch" required></select></label>
+          <button class="secondary" type="submit">Send attendance summary</button>
+          <p id="summary-email-message" class="message" role="alert"></p>
+        </form>
+      </section>
+        <section class="panel correction-panel"><div class="section-label">OPTIONAL DATE</div><h2>Instructor correction</h2><p class="lead">Use this for a student who was physically present but could not scan. Leave the date blank to update today.</p><form id="correction-form" class="correction-grid"><input id="correction-name" placeholder="Student name" required><select id="correction-batch" required></select><select id="correction-subject" required></select><input id="correction-date" type="date" aria-label="Correction date"><select id="correction-status" required><option>Present</option><option>Absent</option></select><button class="secondary" type="submit">Save correction</button></form><p id="correction-message" class="message" role="alert"></p></section>
+      <div class="report-links device-security-link">
+        <button id="open-device-security" class="panel report-link" type="button">
+          <span class="section-label">DEVICE SECURITY</span>
+          <strong>Registered student devices</strong>
+          <span>View device details, audit history, or release an old phone registration →</span>
+        </button>
+        <button id="open-admin-logins" class="panel report-link hidden" type="button">
+          <span class="section-label">MAIN ADMIN ONLY</span>
+          <strong>Admin logins &amp; access</strong>
+          <span>Manage admin accounts and review login/access audit history →</span>
+        </button>
+      </div>
+    </section>
+    <section id="records-view" class="view hidden">
+      <div class="detail-head"><div><div class="eyebrow">ATTENDANCE LOG</div><h1>Recent records</h1><p class="lead">Detailed attendance records from all subjects.</p></div><button class="secondary back-dashboard" type="button">← Dashboard</button></div>
+      <section class="panel table-panel"><div class="table-head"><h2>Attendance records</h2><button id="refresh-records" class="secondary" type="button">Refresh</button></div><div class="table-wrap"><table><thead><tr><th>Date</th><th>Student</th><th>Batch</th><th>Subject</th><th>Status</th></tr></thead><tbody id="records"></tbody></table></div></section>
+    </section>
+    <section id="percentage-view" class="view hidden">
+      <div class="detail-head"><div><div class="eyebrow">PERCENTAGE REPORT</div><h1>Subject-wise attendance</h1><p class="lead">Detailed attendance totals and percentages by subject.</p></div><button class="secondary back-dashboard" type="button">← Dashboard</button></div>
+      <section class="panel table-panel"><div class="table-head"><h2>Attendance percentages</h2><button id="refresh-percentages" class="secondary" type="button">Refresh</button></div><div class="table-wrap"><table><thead><tr><th>Student</th><th>Batch</th><th>Subject</th><th>Attended</th><th>Total classes</th><th>Subject %</th><th>Overall %</th></tr></thead><tbody id="percentages"></tbody></table></div></section>
+    </section>
+    <section id="device-security-view" class="view hidden">
+      <div class="detail-head"><div><div class="eyebrow">DEVICE SECURITY</div><h1>Registered student devices</h1><p class="lead">Review each student’s registered browser/device. If a student changes phones, unlock the old registration so they can register the replacement device on their next check-in.</p></div><button class="secondary back-dashboard" type="button">← Dashboard</button></div>
+      <section class="panel table-panel">
+        <div class="table-head"><h2>Device registry</h2><button id="refresh-devices" class="secondary" type="button">Refresh</button></div>
+        <p id="device-registry-message" class="message" role="alert"></p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Student</th><th>Batch</th><th>Status</th><th>Observed IP</th><th>Last seen</th><th>Last attendance</th><th>Release device</th></tr></thead>
+            <tbody id="device-registry"></tbody>
+          </table>
+        </div>
+      </section>
+      <section class="panel table-panel">
+        <div class="table-head"><h2>Administrative audit history</h2></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Timestamp</th><th>Admin</th><th>Role</th><th>Action</th><th>Affected record</th><th>Reason</th><th>Result</th></tr></thead>
+            <tbody id="admin-audit-log"></tbody>
+          </table>
+        </div>
+      </section>
+    </section>
+    <section id="admin-logins-view" class="view hidden">
+      <div class="detail-head"><div><div class="eyebrow">MAIN ADMIN ONLY</div><h1>Admin logins &amp; access</h1><p class="lead">Manage administrator accounts and review their sign-in and access-change history. Regular admins cannot open this section or its APIs.</p></div><button class="secondary back-dashboard" type="button">← Dashboard</button></div>
+      <section class="panel admin-management">
+        <div class="section-label">ADMIN ACCOUNTS</div>
+        <h2>Manage admins</h2>
+        <p class="lead">Grant access from each eligible account’s row. Approved admins receive access to all configured subjects; email OTP verification is still required before login.</p>
+        <section class="admin-invite-access">
+          <h3>Grant access to a new admin</h3>
+          <p class="lead">Enter their name and email and select subjects. They’ll automatically receive a one-time code and temporary password by email to sign in.</p>
+        <form id="admin-invite-form" class="form-grid">
+          <label>Admin name<input id="admin-invite-name" type="text" autocomplete="name" minlength="2" maxlength="100" required></label>
+          <label>Invite email<input id="admin-invite-email" type="email" autocomplete="email" required></label>
+          <fieldset class="subject-access-fieldset">
+            <legend>Subjects this admin can access</legend>
+            <div id="admin-invite-subjects" class="subject-checkbox-list"></div>
+          </fieldset>
+          <button class="secondary" type="submit">Grant access and send login email</button>
+          <p id="admin-invite-message" class="message" role="alert"></p>
+        </form>
+        </section>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Admin ID</th><th>Name</th><th>Email</th><th>Phone</th><th>Role</th><th>Status</th><th>Created</th><th>Last login</th><th>Last status change</th><th>Actions</th></tr></thead>
+            <tbody id="admin-accounts"></tbody>
+          </table>
+        </div>
+      </section>
+      <section class="panel table-panel">
+        <div class="table-head"><h2>Admin login and access audit</h2><button id="refresh-admin-audit" class="secondary" type="button">Refresh</button></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Timestamp</th><th>Admin</th><th>Role</th><th>Action</th><th>Affected account</th><th>Reason</th><th>Result</th></tr></thead>
+            <tbody id="admin-account-audit-log"></tbody>
+          </table>
+        </div>
+      </section>
+    </section>
+    <footer><span>server time · Asia/Kolkata</span><span>Google Sheets storage</span></footer>
+  </main>
+  <script src="/app.js" defer></script>
+</body>
+</html>

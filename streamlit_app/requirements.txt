@@ -1,0 +1,11 @@
+streamlit>=1.57,<2
+pandas>=2.2,<4
+SQLAlchemy>=2.0,<3
+psycopg[binary]>=3.2,<4
+google-api-python-client>=2.160,<3
+google-auth>=2.36,<3
+bcrypt>=4.2,<6
+qrcode[pil]>=8,<9
+requests>=2.32,<3
+python-dotenv>=1.0,<2
+pytest>=8.3,<9

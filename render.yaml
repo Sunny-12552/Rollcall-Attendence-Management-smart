@@ -1,0 +1,35 @@
+services:
+  - type: web
+    name: rollcall-attendance
+    runtime: node
+    plan: free
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: JWT_SECRET
+        generateValue: true
+      - key: MAIN_ADMIN_BOOTSTRAP_SECRET
+        sync: false
+      - key: DATABASE_URL
+        value: /tmp/attendance-data/attendance.sqlite
+      - key: DEVICE_LOCKS_PATH
+        value: /tmp/attendance-data/.device-locks.json
+      - key: QR_MINUTES
+        value: "30"
+      - key: TRUST_PROXY_HOPS
+        value: "1"
+      - key: TIMEZONE
+        value: Asia/Kolkata
+      - key: EMAIL_PROVIDER
+        value: resend
+      - key: EMAIL_FROM
+        sync: false
+      - key: RESEND_API_KEY
+        sync: false
+      - key: GOOGLE_SPREADSHEET_ID
+        sync: false
+      - key: GOOGLE_SERVICE_ACCOUNT_JSON
+        sync: false

@@ -1,0 +1,31 @@
+.success-toast {
+  position: fixed;
+  z-index: 1000;
+  top: 18px;
+  left: 50%;
+  width: min(560px, calc(100vw - 32px));
+  padding: 14px 20px;
+  transform: translate(-50%, -12px);
+  border: 1px solid #8fc39a;
+  border-radius: 12px;
+  background: #e8f6eb;
+  box-shadow: 0 12px 32px rgba(21, 59, 59, .18);
+  color: #215d32;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.45;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s ease, transform .2s ease;
+}
+
+.success-toast.is-visible {
+  transform: translate(-50%, 0);
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .success-toast {
+    transition: none;
+  }
+}

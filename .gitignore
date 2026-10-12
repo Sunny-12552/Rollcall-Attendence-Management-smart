@@ -1,0 +1,13 @@
+node_modules/
+.env
+*.log
+.admin-account.json
+.admin-account.json.tmp
+data/*.sqlite
+data/*.sqlite-shm
+data/*.sqlite-wal
+streamlit_app/.venv/
+streamlit_app/.streamlit/secrets.toml
+streamlit_app/data/
+streamlit_app/**/__pycache__/
+streamlit_app/.pytest_cache/

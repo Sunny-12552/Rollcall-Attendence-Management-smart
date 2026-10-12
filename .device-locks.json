@@ -1,0 +1,59 @@
+{
+  "deviceAttendanceLocks": {
+    "2026-09-12|a5d59077942c4610de923c5dcbedc59f15a7b7c1779dff843982e0f70b1412bd": {
+      "date": "2026-09-12",
+      "deviceTokenHash": "a5d59077942c4610de923c5dcbedc59f15a7b7c1779dff843982e0f70b1412bd",
+      "studentIdentifier": "Ajay|D7",
+      "createdAt": 1789179222332,
+      "qrSessionId": "a5d59077942c4610de923c5dcbedc59f15a7b7c1779dff843982e0f70b1412bd"
+    },
+    "2026-10-09|1a57f59a-8800-4584-8260-b56d366e0361|d7bbba5629cccc59355525e8477093528824cc53ec4477584f99bb2842dd35ab": {
+      "date": "2026-10-09",
+      "qrSessionId": "1a57f59a-8800-4584-8260-b56d366e0361",
+      "subject": "React",
+      "deviceTokenHash": "d7bbba5629cccc59355525e8477093528824cc53ec4477584f99bb2842dd35ab",
+      "studentIdentifier": "Shashank|P4",
+      "createdAt": 1791567296221
+    },
+    "2026-10-10|7ab4d31b-65dd-4227-a83c-5a844c737bfd|d7bbba5629cccc59355525e8477093528824cc53ec4477584f99bb2842dd35ab": {
+      "date": "2026-10-10",
+      "qrSessionId": "7ab4d31b-65dd-4227-a83c-5a844c737bfd",
+      "subject": "HTML",
+      "deviceTokenHash": "d7bbba5629cccc59355525e8477093528824cc53ec4477584f99bb2842dd35ab",
+      "studentIdentifier": "Shashank|P4",
+      "createdAt": 1791579575938
+    },
+    "2026-10-12|ea855ed0-28d0-4cd7-8d6e-7a1b2e86ad9a|04f5c4682b505f5be2af41e0ad8be5db19793a448d0049561e0ed9b554c71b0f": {
+      "date": "2026-10-12",
+      "qrSessionId": "ea855ed0-28d0-4cd7-8d6e-7a1b2e86ad9a",
+      "subject": "Python",
+      "deviceTokenHash": "04f5c4682b505f5be2af41e0ad8be5db19793a448d0049561e0ed9b554c71b0f",
+      "studentIdentifier": "JAGADEESH|P1",
+      "createdAt": 1791743835697
+    },
+    "2026-10-12|567c90f8-6842-404a-8c4f-764c76c6aedc|d7bbba5629cccc59355525e8477093528824cc53ec4477584f99bb2842dd35ab": {
+      "date": "2026-10-12",
+      "qrSessionId": "567c90f8-6842-404a-8c4f-764c76c6aedc",
+      "subject": "Git & GitHub",
+      "deviceTokenHash": "d7bbba5629cccc59355525e8477093528824cc53ec4477584f99bb2842dd35ab",
+      "studentIdentifier": "Shashank|D7",
+      "createdAt": 1791744023517
+    },
+    "2026-10-12|8a44b5c6-918b-4881-b438-72637b3d75d3|7e9b87f683fa0f2260d2d7d0fc198435a08c7bbf04a18d166c79a6e6f66e21c2": {
+      "date": "2026-10-12",
+      "qrSessionId": "8a44b5c6-918b-4881-b438-72637b3d75d3",
+      "subject": "Node.js",
+      "deviceTokenHash": "7e9b87f683fa0f2260d2d7d0fc198435a08c7bbf04a18d166c79a6e6f66e21c2",
+      "studentIdentifier": "Vanitha|D5",
+      "createdAt": 1791746350467
+    },
+    "2026-10-12|ff3dedb1-1838-4c14-8619-6e1fce2f0400|189c05a57612db72b26d22f986b5c6462e07fe9d5aa294db1f08364ed525c560": {
+      "date": "2026-10-12",
+      "qrSessionId": "ff3dedb1-1838-4c14-8619-6e1fce2f0400",
+      "subject": "Python",
+      "deviceTokenHash": "189c05a57612db72b26d22f986b5c6462e07fe9d5aa294db1f08364ed525c560",
+      "studentIdentifier": "Pavan|P4",
+      "createdAt": 1791788852628
+    }
+  }
+}
