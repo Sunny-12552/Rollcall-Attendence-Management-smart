@@ -1,13 +1,13 @@
-from pathlib import Path
-import sys
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from __future__ import annotations
 
 import io
 import sqlite3
 import secrets
+import sys
 from datetime import datetime
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 import pandas as pd
 import streamlit as st
