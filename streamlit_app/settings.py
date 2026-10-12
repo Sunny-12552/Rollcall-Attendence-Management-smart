@@ -77,7 +77,13 @@ def load_settings(secrets: Mapping | None = None) -> Settings:
     database_url = setting("STREAMLIT_DATABASE_URL", "", secrets)
     database_warning = ""
     if database_url and not database_url.startswith(
-        ("sqlite://", "postgres://", "postgresql://")
+        (
+            "sqlite://",
+            "sqlite+pysqlite://",
+            "postgres://",
+            "postgresql://",
+            "postgresql+psycopg://",
+        )
     ):
         if "://" not in database_url and (
             "/" in database_url
@@ -94,7 +100,13 @@ def load_settings(secrets: Mapping | None = None) -> Settings:
     if not database_url:
         shared_database_url = setting("DATABASE_URL", "", secrets)
         if shared_database_url and not shared_database_url.startswith(
-            ("sqlite://", "postgres://", "postgresql://")
+            (
+                "sqlite://",
+                "sqlite+pysqlite://",
+                "postgres://",
+                "postgresql://",
+                "postgresql+psycopg://",
+            )
         ):
             shared_database_url = ""
             database_warning = database_warning or (

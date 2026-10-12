@@ -21,7 +21,13 @@ The default database is the separate local file `streamlit_app/data/rollcall.sql
 
 ## Configure secrets
 
-For local use, the app loads variables from the project-root `.env` file, or you can create `.streamlit\secrets.toml` (it is ignored by Git). Streamlit secrets take precedence over environment variables. `STREAMLIT_DATABASE_URL` can select a separate Streamlit database; if the shared `DATABASE_URL` is a plain file path for the Node app, Streamlit uses its separate local SQLite database instead. In Community Cloud, add the TOML values in **App settings → Secrets**. Never commit the secrets file or service-account key.
+For local use, the app loads variables from the project-root `.env` file, or you can create `.streamlit\secrets.toml` (it is ignored by Git). Streamlit secrets take precedence over environment variables. `STREAMLIT_DATABASE_URL` is the Streamlit-specific database override and takes precedence over `DATABASE_URL`; it accepts a SQLAlchemy database URL or a SQLite file path. Relative SQLite paths resolve from the project root, absolute paths are supported, and missing parent directories are created. If `DATABASE_URL` is the Node app's plain SQLite path, Streamlit deliberately keeps its separate local SQLite database instead. Do not set the Streamlit target to `./data/attendance.sqlite`: that is the Node app's authoritative database path locally, and a Streamlit Cloud instance would create a different, empty database at that relative path. Use a managed PostgreSQL URL for Community Cloud; its local filesystem is ephemeral. In Community Cloud, add the TOML values in **App settings → Secrets**. Never commit the secrets file or service-account key.
+
+For Community Cloud, use this Streamlit-only database setting instead of `DATABASE_URL` in the sample below (do not configure both):
+
+```toml
+STREAMLIT_DATABASE_URL = "postgresql://USERNAME:PASSWORD@HOST:5432/DATABASE?sslmode=require"
+```
 
 ```toml
 DATABASE_URL = "postgresql://USER:PASSWORD@HOST:5432/DATABASE?sslmode=require"
@@ -64,7 +70,7 @@ For local migration, set `SOURCE_DATABASE_PATH` to the original database path if
 ## Deploy to Streamlit Community Cloud
 
 1. Push this project to a private GitHub repository without `.env`, `.streamlit/secrets.toml`, database files, or service-account JSON.
-2. Create a managed PostgreSQL database with TLS and backups. Configure its SQLAlchemy URL as `DATABASE_URL` in Community Cloud secrets.
+2. Create a managed PostgreSQL database with TLS and backups. Configure its SQLAlchemy URL as `STREAMLIT_DATABASE_URL` in Community Cloud secrets. This keeps Streamlit's target explicit and separate from the Node app's `DATABASE_URL`.
 3. Grant the service account access to the existing spreadsheet and configure Google and email secrets.
 4. Create a Streamlit Community Cloud app whose entry point is `streamlit_app/app.py`.
 5. Add the secrets above, set `APP_URL` to the deployed app URL, and deploy.

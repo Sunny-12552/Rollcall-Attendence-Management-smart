@@ -5,6 +5,7 @@ from pathlib import Path
 from sqlalchemy.engine import make_url
 
 from streamlit_app import settings as settings_module
+from streamlit_app.database import engine_for
 
 
 def test_load_settings_reads_project_root_env(tmp_path, monkeypatch):
@@ -67,3 +68,44 @@ def test_streamlit_database_file_path_is_normalized(tmp_path, monkeypatch):
         tmp_path / "streamlit_app" / "data" / "custom.sqlite"
     ).resolve()
     assert settings.database_warning == ""
+
+
+def test_streamlit_database_secret_path_is_normalized(tmp_path, monkeypatch):
+    monkeypatch.setattr(settings_module, "ROOT", tmp_path)
+    monkeypatch.setenv("DATABASE_URL", "sqlite:///node-database.sqlite")
+
+    settings = settings_module.load_settings(
+        {"STREAMLIT_DATABASE_URL": "./streamlit_app/data/community.sqlite"}
+    )
+
+    actual_database = Path(make_url(settings.database_url).database).resolve()
+    assert actual_database == (
+        tmp_path / "streamlit_app" / "data" / "community.sqlite"
+    ).resolve()
+
+
+def test_streamlit_database_accepts_sqlalchemy_driver_url(monkeypatch):
+    url = "postgresql+psycopg://user:password@db.example.test/rollcall"
+    monkeypatch.setenv("STREAMLIT_DATABASE_URL", url)
+    monkeypatch.delenv("DATABASE_URL", raising=False)
+
+    settings = settings_module.load_settings()
+
+    assert settings.database_url == url
+    assert settings.database_warning == ""
+
+
+def test_absolute_streamlit_sqlite_path_creates_parent_directory(tmp_path, monkeypatch):
+    monkeypatch.setattr(settings_module, "ROOT", tmp_path)
+    target = tmp_path / "external" / "nested" / "attendance.sqlite"
+    monkeypatch.setenv("STREAMLIT_DATABASE_URL", str(target))
+    monkeypatch.delenv("DATABASE_URL", raising=False)
+
+    settings = settings_module.load_settings()
+    engine = engine_for(settings.database_url)
+    try:
+        actual_database = Path(make_url(settings.database_url).database).resolve()
+        assert actual_database == target.resolve()
+        assert target.parent.is_dir()
+    finally:
+        engine.dispose()
